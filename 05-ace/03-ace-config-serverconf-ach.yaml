@@ -1,0 +1,14 @@
+# ==============================================================================
+# Configuration CR: serverconf dla App Connect for Healthcare (ACH)
+# Definiuje zdalny domyslny menedzer kolejek dla wezlow wejsciowych/wyjsciowych
+# ==============================================================================
+apiVersion: appconnect.ibm.com/v1beta1
+kind: Configuration
+metadata:
+  name: umed-default-qmgr
+  namespace: cp4i
+spec:
+  type: serverconf
+  description: "Default QMgr for ACH Flows (server.conf.yaml)"
+  # base64("remoteDefaultQueueManager: '{CP4iQMGRDEMO}:QMGRDEMO'")
+  data: cmVtb3RlRGVmYXVsdFF1ZXVlTWFuYWdlcjogJ3tDUDRpUU1HUkRFTU99OlFNR1JERU1PJw==

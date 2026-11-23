@@ -1,0 +1,59 @@
+# ==============================================================================
+# IntegrationRuntime CR: App Connect for Healthcare (ACH) - Przepływ HL7 / MLLP
+# Wystawia port MLLP TCP (np. 1111) oraz łączy się z kolejkami HL7 w MQ (QMGRDEMO)
+#
+# Adnotacje licencyjne dla IBM License Service (App Connect for Healthcare)
+# Źródło: https://www.ibm.com/docs/en/app-connect/13.0.x?topic=iu-installing-license-service-adding-annotations-app-connect-healthcare-in-containers
+# ==============================================================================
+apiVersion: appconnect.ibm.com/v1beta1
+kind: IntegrationRuntime
+metadata:
+  name: ace-ach-hl7-runtime
+  namespace: cp4i
+  annotations:
+    productChargedContainers: "All"
+    productID: "563f8a6f0cea439eacc2cad8215dea7d"
+    productName: "IBM App Connect for Healthcare"
+    productMetric: "INSTALL"
+  labels:
+    backup.appconnect.ibm.com/component: integrationruntime
+spec:
+  license:
+    accept: true
+    license: L-RJGW-BUAA2R # Klucz licencyjny dla App Connect 13.0.8 / 13.0.9
+    use: CloudPakForIntegrationNonProduction
+  replicas: 1
+  version: "13.0"
+  routes:
+    disabled: true
+  service:
+    endpointType: http
+    ports:
+      - name: mllp
+        port: 1111
+        targetPort: 1111
+        protocol: TCP
+        nodePort: 30131
+    type: NodePort
+  barURL:
+    - https://ace-dashboard-dash.cp4i:3443/v1/directories/jgr-ach-hl7?archive=true
+  template:
+    metadata:
+      annotations:
+        productChargedContainers: "All"
+        productID: "563f8a6f0cea439eacc2cad8215dea7d"
+        productName: "IBM App Connect for Healthcare"
+        productMetric: "INSTALL"
+    spec:
+      containers:
+        - name: runtime
+          resources:
+            limits:
+              cpu: 1
+              memory: 1Gi
+            requests:
+              cpu: 1
+              memory: 1Gi
+  configurations:
+    - ace-qmgr-demo-policy
+    - umed-default-qmgr

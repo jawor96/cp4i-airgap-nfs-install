@@ -1,0 +1,12 @@
+# ==============================================================================
+# Konfiguracja StorageClass dla IBM Cloud Pak foundational services (Common Services)
+# W środowisku NFS definiujemy klasę pamięci masowej (np. nfs-client)
+# ==============================================================================
+apiVersion: operator.ibm.com/v3
+kind: CommonService
+metadata:
+  name: common-service
+  namespace: ibm-common-services
+spec:
+  size: small
+  storageClass: nfs-client # Zmień na nazwę swojej klasy NFS w OCP (np. nfs-client, managed-nfs-storage)

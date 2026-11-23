@@ -1,0 +1,17 @@
+# ==============================================================================
+# Configuration CR: policyproject dla połączenia z IBM MQ (QMGRDEMO)
+# Zapewnia definicję punktu końcowego połączenia MQ dla przepływów ACE
+# ==============================================================================
+apiVersion: appconnect.ibm.com/v1beta1
+kind: Configuration
+metadata:
+  name: ace-qmgr-demo-policy
+  namespace: cp4i
+spec:
+  type: policyproject
+  description: "Polityka polaczenia z kolejkowym menedzerem QMGRDEMO"
+  # Wartosc data zawiera poprawny projekt polityki w formacie ZIP zakodowany w base64:
+  # CP4iQMGRDEMO/
+  #   ├── QMGRDEMO.policyxml (destinationQueueManagerName=QMGRDEMO, listenerPortNumber=1414, channelName=ACE.TO.MQ)
+  #   └── policy.descriptor
+  data: UEsDBBQAAAAIALlYd12jvWxnEQEAAPUBAAAfAAAAQ1A0aVFNR1JERU1PL1FNR1JERU1PLnBvbGljeXhtbH2RwW6DMAyG730KxB0yJA47hFRTx7ZKhY6VPkAaPBaJJJCEarz9wkKnTqt2svz5z287xutP0QVn0IYrmYVJfBcGIJlquGyz8Fg/RffhmqxwrzrOOBiyCgKfTIEP9dRDFhZVLptecWnDhZdUOF4Vz2+PebG/0BpE31H7+8Vs6myZkhKYdYOQzW6blzVGV8hrGjCWSzqTaoQRCippC3puRi69MPpP5X2GK/yijJVzaRCtjhoQKuInEYkhZn3KY3NmGN3Ue6uOGwsS9KvSthzFCTRJ0iTF6EZhWfSDurW673EeNnlc7+OicsteYS80wEbN7bRtQFoXCUZ/kFeOBg6HHXmnnQGMlmy+FfL/7k6Ifm74BVBLAwQUAAAACAC5WHddf+38MpwAAADSAAAAHgAAAENQNGlRTUdSREVNTy9wb2xpY3kuZGVzY3JpcHRvcnWOvQ6CMBRGd56i6W4vJsYYQ2EQdSKi0QeAcgNV+pO2sfr2EpkcnL9855yseKmRPNF5aTSnS5ZSglqYTuqe09v1sNjQIk8ya0Yp3rUzdxShRC+ctME4Mr2153QIwW4BYoxMtooJo+C7gHWmg4ittwM6BIXeNz22zjzQwZqlMIPtDKZ5Qsivi+hGIae7eiXP1fFS7qsThSkI/hTlH1BLAQIUAxQAAAAIALlYd12jvWxnEQEAAPUBAAAfAAAAAAAAAAAAAACAAQAAAABDUDRpUU1HUkRFTU8vUU1HUkRFTU8ucG9saWN5eG1sUEsBAhQDFAAAAAgAuVh3XX/t/DKcAAAA0gAAAB4AAAAAAAAAAAAAAIABTgEAAENQNGlRTUdSREVNTy9wb2xpY3kuZGVzY3JpcHRvclBLBQYAAAAAAgACAJkAAAAmAgAAAAA=

@@ -1,0 +1,14 @@
+# ==============================================================================
+# Instancja Platform UI (PlatformNavigator) - CP4I 16.2.0 LTS
+# ==============================================================================
+apiVersion: integration.ibm.com/v1beta1
+kind: PlatformNavigator
+metadata:
+  name: cp4i-navigator
+  namespace: cp4i
+spec:
+  license:
+    accept: true
+    license: L-VAD2-N2WPMY # Klucz licencyjny dla CP4I 16.2.0
+  replicas: 1
+  version: 16.2.0

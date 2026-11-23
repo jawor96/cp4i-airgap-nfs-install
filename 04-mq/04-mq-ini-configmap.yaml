@@ -1,0 +1,15 @@
+# ==============================================================================
+# ConfigMap z konfiguracją qm.ini dla IBM MQ (wersja minimalna / bezpieczna)
+# ==============================================================================
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mq-demo-ini
+  namespace: cp4i
+data:
+  mq-demo-resources.ini: |
+    Log:
+      LogPrimaryFiles=3
+      LogSecondaryFiles=2
+      LogFilePages=4096
+      LogType=CIRCULAR

@@ -1,0 +1,36 @@
+# ==============================================================================
+# Łańcuch PKI Cert-Manager dla CP4I:
+# 1. ClusterIssuer self-signed (do wygenerowania certyfikatu Root CA)
+# 2. Certyfikat Root CA (cp4i-root-ca-cert) w przestrzeni cert-manager (Cluster Resource Namespace)
+# 3. ClusterIssuer typu CA (gitops-selfsigned-issuer) wydający certyfikaty dla MQ i ACE
+# ==============================================================================
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: cp4i-bootstrap-issuer
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: cp4i-root-ca-cert
+  namespace: cert-manager
+spec:
+  isCA: true
+  commonName: cp4i-root-ca
+  secretName: cp4i-root-ca-secret
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  issuerRef:
+    name: cp4i-bootstrap-issuer
+    kind: ClusterIssuer
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: gitops-selfsigned-issuer
+spec:
+  ca:
+    secretName: cp4i-root-ca-secret

@@ -1,0 +1,18 @@
+# ==============================================================================
+# CatalogSource dla środowiska Air-Gapped (CP4I 16.2.0)
+# W środowisku Air-Gapped CatalogSource wskazuje na obraz katalogu zmirrorowany
+# do lokalnego rejestru (np. Harbor, Quay lub zintegrowany rejestr OpenShift).
+# Manifest ten odpowiada wynikowi generowanemu przez narzędzie oc-ibm_pak / oc-mirror.
+# ==============================================================================
+apiVersion: operators.coreos.com/v1alpha1
+kind: CatalogSource
+metadata:
+  name: ibm-operator-catalog
+  namespace: openshift-marketplace
+spec:
+  displayName: IBM Operator Catalog (Air-Gapped)
+  # Zastąp poniższy adres pełnym adresem obrazu w lokalnym rejestrze (z sha256 digest lub odpowiednim tagiem wydania)
+  # Przykład: image: registry.local.umed.pl/cpopen/ibm-operator-catalog@sha256:...
+  image: icr.io/cpopen/ibm-operator-catalog@sha256:d55f4625b16120e3a6c9861618c7c917f692ef9eb42921a2c3a3791a92e10c14
+  publisher: IBM
+  sourceType: grpc

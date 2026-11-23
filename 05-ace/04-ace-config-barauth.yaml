@@ -1,0 +1,16 @@
+# ==============================================================================
+# Configuration CR: barauth (opcjonalny, używany przy pobieraniu BAR z chronionego rejestru HTTP/Git)
+# UWAGA BEZPIECZEŃSTWA: Wartość w 'data' powinna zostać wygenerowana dynamicznie
+# podczas wdrożenia za pomocą:
+# echo -n '{"authType": "BASIC_AUTH", "credentials": {"username": "'$BAR_USER'", "password": "'$BAR_PASSWORD'"}}' | base64
+# ==============================================================================
+apiVersion: appconnect.ibm.com/v1beta1
+kind: Configuration
+metadata:
+  name: local-barauth
+  namespace: cp4i
+spec:
+  type: barauth
+  description: "Szablon autoryzacji do pobierania plikow BAR"
+  # Wypełnij własnym base64 poświadczeń lub pomiń, jeśli pliki BAR są wgrywane bezpośrednio przez Dashboard UI
+  data: eyJhdXRoVHlwZSI6ICJCQVNJQ19BVVRIIiwgImNyZWRlbnRpYWxzIjogeyJ1c2VybmFtZSI6ICJyZXBsYWNlLXVzZXIiLCAicGFzc3dvcmQiOiAicmVwbGFjZS1wYXNzd29yZCJ9fQ==

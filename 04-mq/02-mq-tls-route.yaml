@@ -1,0 +1,19 @@
+# ==============================================================================
+# OpenShift Route Passthrough dla bezpiecznego dostępu SNI do IBM MQ
+# Mapowanie nazwy kanału EXTAPP.TO.MQ na domenę SNI: extapp2e-to2e-mq.chl.mq.ibm.com
+# Zgodnie z: https://www.ibm.com/docs/en/ibm-mq/9.4.x?topic=requirements-how-mq-provides-multiple-certificates-capability
+# ==============================================================================
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: qmgr-demo-tls-route
+  namespace: cp4i
+spec:
+  host: extapp2e-to2e-mq.chl.mq.ibm.com
+  to:
+    kind: Service
+    name: qmgr-demo-ibm-mq
+  port:
+    targetPort: 1414
+  tls:
+    termination: passthrough

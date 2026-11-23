@@ -1,0 +1,67 @@
+# ==============================================================================
+# Instancja IBM MQ QueueManager (SingleInstance z NFS Persistent Storage)
+# Wersja: 10.0.0.5-r2 (Operator channel: v4.0-sc2)
+# Licencjonowanie w ramach IBM App Connect Enterprise (ACE) / Supporting Program
+# Zgodnie z: https://www.ibm.com/docs/en/ibm-mq/10.0.x?topic=examples-example-customizing-license-service-annotations
+# ==============================================================================
+apiVersion: mq.ibm.com/v1beta1
+kind: QueueManager
+metadata:
+  name: qmgr-demo
+  namespace: cp4i
+spec:
+  # Adnotacje dla IBM License Service (IBMLS) informujące, że instancja MQ
+  # jest instalowana i rozliczana w ramach licencji IBM App Connect Enterprise (ACE)
+  annotations:
+    productMetric: FREE # Oznaczenie jako program wspierający (supporting program) nieliczony podwójnie w metrykach VPC
+  license:
+    accept: true
+    license: L-VEMB-RABZSN # Identyfikator licencji MQ 10.0.0 dla CP4I 16.2.0
+    use: NonProduction # Lub Production w zależności od środowiska
+  pki:
+    keys:
+      - name: default
+        secret:
+          secretName: qmgr-demo-tls-secret
+          items:
+            - tls.key
+            - tls.crt
+    trust:
+      - name: cp4ica
+        secret:
+          secretName: qmgr-demo-tls-secret
+          items:
+            - ca.crt
+  queueManager:
+    name: QMGRDEMO
+    resources:
+      limits:
+        cpu: 500m
+        memory: 1Gi
+      requests:
+        cpu: 500m
+        memory: 512Mi
+    storage:
+      queueManager:
+        type: persistent-claim
+      defaultClass: nfs-client # Zmień na nazwę klasy StorageClass NFS w Twoim klastrze OCP
+    availability:
+      type: SingleInstance
+    ini:
+      - configMap:
+          name: mq-demo-ini
+          items:
+            - mq-demo-resources.ini
+    mqsc:
+      - configMap:
+          name: mq-demo-mqsc
+          items:
+            - mq-demo-resources.mqsc
+  version: 10.0.0.5-r2 # Najnowsze wydanie QueueManagera dla kanału v4.0-sc2
+  web:
+    enabled: true
+    console:
+      authentication:
+        provider: integration-keycloak
+      authorization:
+        provider: integration-keycloak

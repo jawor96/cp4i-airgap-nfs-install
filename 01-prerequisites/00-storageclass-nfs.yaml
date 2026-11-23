@@ -1,0 +1,16 @@
+# ==============================================================================
+# Przykładowy manifest StorageClass dla NFS (nfs-subdir-external-provisioner)
+# UWAGA: Jeżeli w klastrze istnieje już zdefiniowana klasa NFS (np. nfs-client,
+# managed-nfs-storage), należy użyć istniejącej klasy i zdefiniować jej nazwę w env.sh.
+# ==============================================================================
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: nfs-client
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "false"
+provisioner: k8s-sigs.io/nfs-subdir-external-provisioner # Standardowy sterownik nfs-subdir
+parameters:
+  archiveOnDelete: "false"
+reclaimPolicy: Delete
+volumeBindingMode: Immediate

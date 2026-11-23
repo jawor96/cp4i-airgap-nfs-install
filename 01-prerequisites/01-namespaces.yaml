@@ -1,0 +1,30 @@
+# ==============================================================================
+# Przestrzenie nazw (Namespaces) dla CP4I, Foundational Services i Cert-Managera
+# ==============================================================================
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cp4i
+  annotations:
+    openshift.io/node-selector: ""
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ibm-common-services
+  annotations:
+    openshift.io/node-selector: ""
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cert-manager-operator
+  annotations:
+    openshift.io/node-selector: ""
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cert-manager
+  annotations:
+    openshift.io/node-selector: ""

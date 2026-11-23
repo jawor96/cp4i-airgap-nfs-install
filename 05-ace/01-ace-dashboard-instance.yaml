@@ -1,0 +1,46 @@
+# ==============================================================================
+# Instancja App Connect Dashboard (ACH / Content Server & Control UI)
+# Wymaga pamięci masowej w trybie ReadWriteMany (RWX) - NFS
+# Wersja: 13.0.9.0-r1 (Operator channel: v13.6 LTS)
+# ==============================================================================
+apiVersion: appconnect.ibm.com/v1beta1
+kind: Dashboard
+metadata:
+  name: ace-dashboard
+  namespace: cp4i
+  labels:
+    backup.appconnect.ibm.com/component: dashboard
+spec:
+  authentication:
+    integrationKeycloak:
+      enabled: true
+  authorization:
+    integrationKeycloak:
+      enabled: true
+  displayMode: IntegrationRuntimes
+  license:
+    accept: true
+    license: L-RJGW-BUAA2R # Klucz licencyjny dla App Connect 13.0.8 / 13.0.9
+    use: CloudPakForIntegrationNonProduction
+  pod:
+    containers:
+      content-server:
+        resources:
+          limits:
+            memory: 512Mi
+          requests:
+            cpu: 50m
+            memory: 50Mi
+      control-ui:
+        resources:
+          limits:
+            memory: 512Mi
+          requests:
+            cpu: 50m
+            memory: 125Mi
+  replicas: 1
+  storage:
+    size: 5Gi
+    type: persistent-claim
+    class: nfs-client # Klasa pamięci masowej NFS obsługująca tryb ReadWriteMany (RWX)
+  version: 13.0.9.0-r1

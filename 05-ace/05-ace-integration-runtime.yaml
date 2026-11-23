@@ -1,0 +1,35 @@
+# ==============================================================================
+# IntegrationRuntime CR: Podstawowa instancja Integration Runtime
+# Wersja przypięta: 13.0.9.0-r1 (Operator channel: v13.6 LTS)
+# ==============================================================================
+apiVersion: appconnect.ibm.com/v1beta1
+kind: IntegrationRuntime
+metadata:
+  name: ace-mqapi-runtime
+  namespace: cp4i
+  labels:
+    backup.appconnect.ibm.com/component: integrationruntime
+spec:
+  license:
+    accept: true
+    license: L-RJGW-BUAA2R # Klucz licencyjny dla App Connect 13.0.8 / 13.0.9
+    use: CloudPakForIntegrationNonProduction
+  replicas: 1
+  version: 13.0.9.0-r1
+  template:
+    spec:
+      containers:
+        - name: runtime
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 250m
+              memory: 256Mi
+  # W środowisku produkcyjnym/air-gapped plik BAR można:
+  # 1. Wgrać bezpośrednio przez App Connect Dashboard UI (Content Server zapisze go na wolumenie NFS)
+  # 2. Podać URL wygenerowany przez Dashboard UI (np. http://ace-dashboard-content-server.../umed-cp4i-mqapi-prem.bar)
+  # 3. Zbudować własny obraz kontenera z osadzonym plikiem BAR (spec.template.spec.containers[0].image)
+  configurations:
+    - ace-qmgr-demo-policy

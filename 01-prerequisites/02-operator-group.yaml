@@ -1,0 +1,13 @@
+# ==============================================================================
+# OperatorGroup dla Red Hat OpenShift Cert-Manager Operator
+# Uwaga: Operatorzy CP4I są instalowani w przestrzeni openshift-operators
+# (tryb AllNamespaces), która posiada już domyślny globalny OperatorGroup.
+# ==============================================================================
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  name: cert-manager-operatorgroup
+  namespace: cert-manager-operator
+spec:
+  targetNamespaces:
+  - cert-manager-operator

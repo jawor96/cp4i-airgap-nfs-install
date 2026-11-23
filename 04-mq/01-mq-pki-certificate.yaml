@@ -1,0 +1,24 @@
+# ==============================================================================
+# Certyfikat TLS dla instancji IBM MQ (zarządzany przez Cert-Manager)
+# ==============================================================================
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: qmgr-demo-selfsigned-cert
+  namespace: cp4i
+spec:
+  commonName: mq-demo
+  secretName: qmgr-demo-tls-secret
+  issuerRef:
+    name: gitops-selfsigned-issuer
+    kind: ClusterIssuer
+  dnsNames:
+    - qmgr-demo
+    - qmgr-demo.cp4i
+    - qmgr-demo.cp4i.svc
+    - qmgr-demo.cp4i.svc.cluster.local
+    - qmgr-demo-ibm-mq
+    - qmgr-demo-ibm-mq.cp4i
+    - qmgr-demo-ibm-mq.cp4i.svc
+    - qmgr-demo-ibm-mq.cp4i.svc.cluster.local
+    - extapp2e-to2e-mq.chl.mq.ibm.com

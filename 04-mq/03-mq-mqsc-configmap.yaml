@@ -1,0 +1,55 @@
+# ==============================================================================
+# ConfigMap z bezpiecznymi definicjami kolejek, kanałów i uprawnień MQSC
+# ==============================================================================
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mq-demo-mqsc
+  namespace: cp4i
+data:
+  mq-demo-resources.mqsc: |
+    *##########################################################
+    * 1. Bezpieczeństwo domyślne (CONNAUTH & CHLAUTH)
+    *##########################################################
+    ALTER AUTHINFO(SYSTEM.DEFAULT.AUTHINFO.IDPWOS) AUTHTYPE(IDPWOS) CHCKCLNT(OPTIONAL)
+    REFRESH SECURITY TYPE(CONNAUTH)
+
+    SET CHLAUTH('*') TYPE(BLOCKUSER) USERLIST('nobody','*MQADMIN') ACTION(REPLACE)
+    SET CHLAUTH('SYSTEM.*') TYPE(ADDRESSMAP) ADDRESS('*') USERSRC(NOACCESS) ACTION(REPLACE)
+
+    *##########################################################
+    * 2. Kanał wewnętrzny dla App Connect Enterprise (ruch wewnątrz klastra OCP)
+    *##########################################################
+    DEFINE CHANNEL(ACE.TO.MQ) CHLTYPE(SVRCONN) TRPTYPE(TCP) MCAUSER('mqm') REPLACE
+    SET CHLAUTH('ACE.TO.MQ') TYPE(BLOCKUSER) USERLIST('nobody') ACTION(ADD)
+    SET CHLAUTH('ACE.TO.MQ') TYPE(ADDRESSMAP) ADDRESS('*') USERSRC(CHANNEL) ACTION(REPLACE)
+
+    *##########################################################
+    * 3. Kanał zewnętrzny przez Route (TLS 1.3)
+    *##########################################################
+    DEFINE CHANNEL(EXTAPP.TO.MQ) CHLTYPE(SVRCONN) TRPTYPE(TCP) +
+           SSLCIPH(ANY_TLS13_OR_HIGHER) SSLCAUTH(OPTIONAL) MCAUSER('mqm') REPLACE
+    SET CHLAUTH('EXTAPP.TO.MQ') TYPE(BLOCKUSER) USERLIST('nobody') ACTION(ADD)
+    SET CHLAUTH('EXTAPP.TO.MQ') TYPE(ADDRESSMAP) ADDRESS('*') USERSRC(CHANNEL) ACTION(REPLACE)
+
+    *##########################################################
+    * 4. Uprawnienia OAM
+    *##########################################################
+    SET AUTHREC OBJTYPE(QMGR) GROUP('mqm') AUTHADD(ALL)
+    SET AUTHREC PROFILE('**') OBJTYPE(QUEUE) GROUP('mqm') AUTHADD(ALL)
+
+    *##########################################################
+    * 5. Definicje kolejek lokalnych
+    *##########################################################
+    DEFINE QLOCAL(CP4I.DEMO.IN.Q) DEFPSIST(YES) REPLACE
+    DEFINE QLOCAL(CP4I.DEMO.OUT.Q) DEFPSIST(YES) REPLACE
+    DEFINE QLOCAL(CP4I.DEMO.ERROR.Q) DEFPSIST(YES) REPLACE
+    DEFINE QLOCAL(CP4I.DEMO.API.Q) BOQNAME(CP4I.DEMO.ERROR.Q) BOTHRESH(1) REPLACE
+    DEFINE QLOCAL(CP4I.DEMO.REQUEST.Q) BOQNAME(CP4I.DEMO.ERROR.Q) BOTHRESH(1) REPLACE
+    DEFINE QLOCAL(BACKEND.SHARED.INPUT) REPLACE
+    DEFINE QLOCAL(BACKEND.SHARED.REPLY) REPLACE
+
+    * Definicje kolejek dedykowanych dla App Connect for Healthcare (ACH / HL7)
+    DEFINE QLOCAL(HL7.INPUT.Q) DEFPSIST(YES) REPLACE
+    DEFINE QLOCAL(HL7.OUTPUT.Q) DEFPSIST(YES) REPLACE
+    DEFINE QLOCAL(HL7.ERROR.Q) DEFPSIST(YES) REPLACE

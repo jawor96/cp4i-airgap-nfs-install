@@ -8,11 +8,9 @@ metadata:
   namespace: cp4i
 data:
   mq-demo-resources.ini: |
-    Log:
-      LogPrimaryFiles=3
-      LogSecondaryFiles=2
-      LogFilePages=4096
-      LogType=CIRCULAR
     Channels:
       MaxChannels=100
       MaxActiveChannels=100
+      MQIBindType=FASTPATH
+    TCP:
+      KeepAlive=Yes

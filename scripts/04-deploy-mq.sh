@@ -49,12 +49,12 @@ if [[ -n "${SUB_NAME}" ]]; then
 fi
 
 # Domyślne wartości LTS dla MQ v10 w razie braku danych w CSV
-INST_MQ_VER="${INST_MQ_VER:-${MQ_VERSION:-10.0.0.5-r2}}"
-INST_LIC="${INST_LIC:-${MQ_LICENSE:-L-VEMB-RABZSN}}"
+INST_MQ_VER="${INST_MQ_VER:-${MQ_VERSION:-10.0.1.0-r1}}"
+INST_LIC="${INST_LIC:-${MQ_LICENSE:-L-VCNK-GTT2F3}}"
 log_info "Wersja IBM MQ: ${INST_MQ_VER}, Licencja: ${INST_LIC}, StorageClass: ${NFS_BLOCK_STORAGE_CLASS}"
 
-# 5. Wdrożenie instancji QueueManager z adnotacjami License Service dla ACE i PKI Trust
-log_step "4.5. Wdrożenie instancji QueueManager (${QMGR_NAME}) z adnotacjami licencyjnymi dla ACE i PKI Trust"
+# 5. Wdrożenie instancji QueueManager z adnotacjami License Service dla ACE, PKI Trust i supplementalGroups NFS
+log_step "4.5. Wdrożenie instancji QueueManager (${QMGR_NAME}) z adnotacjami licencyjnymi dla ACE, PKI Trust i uprawnieniami NFS"
 cat <<EOF | oc apply -n "${CP4I_NAMESPACE}" -f -
 apiVersion: mq.ibm.com/v1beta1
 kind: QueueManager
@@ -67,7 +67,14 @@ spec:
   license:
     accept: true
     license: ${INST_LIC}
+    metric: VirtualProcessorCore
     use: ${MQ_LICENSE_USE}
+  version: ${INST_MQ_VER}
+  securityContext:
+    initVolumeAsRoot: false
+    readOnlyRootFilesystem: false
+    supplementalGroups:
+      - 65534
   pki:
     keys:
       - name: default
@@ -86,17 +93,31 @@ spec:
     name: ${QM_NAME_UPPER}
     resources:
       limits:
-        cpu: 500m
+        cpu: '1'
         memory: 1Gi
       requests:
-        cpu: 500m
-        memory: 512Mi
-    storage:
-      queueManager:
-        type: persistent-claim
-      defaultClass: ${NFS_BLOCK_STORAGE_CLASS}
+        cpu: '1'
+        memory: 1Gi
     availability:
       type: SingleInstance
+    storage:
+      allowVolumeExpansion: false
+      defaultClass: ${NFS_BLOCK_STORAGE_CLASS}
+      persistedData:
+        enabled: true
+        size: 2Gi
+        type: persistent-claim
+      queueManager:
+        size: 2Gi
+        type: persistent-claim
+      recoveryLogs:
+        enabled: true
+        size: 2Gi
+        type: persistent-claim
+      scratch:
+        enabled: true
+      tmp:
+        enabled: true
     ini:
       - configMap:
           name: mq-demo-ini
@@ -107,14 +128,15 @@ spec:
           name: mq-demo-mqsc
           items:
             - mq-demo-resources.mqsc
-  version: ${INST_MQ_VER}
   web:
-    enabled: true
     console:
       authentication:
         provider: integration-keycloak
       authorization:
         provider: integration-keycloak
+    enabled: true
+    route:
+      enabled: true
 EOF
 
 # 6. Oczekiwanie na gotowość QueueManagera

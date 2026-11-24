@@ -13,3 +13,6 @@ data:
       LogSecondaryFiles=2
       LogFilePages=4096
       LogType=CIRCULAR
+    Channels:
+      MaxChannels=100
+      MaxActiveChannels=100

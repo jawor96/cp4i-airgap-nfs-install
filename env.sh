@@ -22,9 +22,9 @@ export CERT_MANAGER_CLUSTER_RESOURCE_NS="${CERT_MANAGER_CLUSTER_RESOURCE_NS:-cer
 # Konfiguracja StorageClass dla NFS
 # ==============================================================================
 # W środowisku NFS definiujemy klasę pamięci masowej (np. nfs-client, managed-nfs-storage)
-export NFS_STORAGE_CLASS="${NFS_STORAGE_CLASS:-nfs-client}"
+export NFS_STORAGE_CLASS="${NFS_STORAGE_CLASS:-mq-nfs-v41}"
 export NFS_FILE_STORAGE_CLASS="${NFS_FILE_STORAGE_CLASS:-$NFS_STORAGE_CLASS}" # Używane przez ACE Dashboard (RWX)
-export NFS_BLOCK_STORAGE_CLASS="${NFS_BLOCK_STORAGE_CLASS:-$NFS_STORAGE_CLASS}" # Używane przez Platform UI / Common Services / MQ (RWO)
+export NFS_BLOCK_STORAGE_CLASS="${NFS_BLOCK_STORAGE_CLASS:-$NFS_STORAGE_CLASS}" # Używane przez Platform UI / Common Services / MQ
 
 # ==============================================================================
 # Źródła katalogów (CatalogSource) i zatwierdzanie planów instalacji
@@ -55,8 +55,8 @@ export PN_VERSION="${PN_VERSION:-16.2.0}"
 export PN_LICENSE="${PN_LICENSE:-L-VAD2-N2WPMY}"
 
 export MQ_CHANNEL="${MQ_CHANNEL:-v4.0-sc2}"
-export MQ_VERSION="${MQ_VERSION:-10.0.0.5-r2}"
-export MQ_LICENSE="${MQ_LICENSE:-L-VEMB-RABZSN}" # Klucz licencyjny MQ 10.0.0 dla CP4I 16.2.0
+export MQ_VERSION="${MQ_VERSION:-10.0.1.0-r1}"
+export MQ_LICENSE="${MQ_LICENSE:-L-VCNK-GTT2F3}" # Klucz licencyjny MQ 10.0.1 dla CP4I 16.2.x
 
 export ACE_CHANNEL="${ACE_CHANNEL:-v13.6}"
 export ACE_VERSION="${ACE_VERSION:-13.0.9.0-r1}" # Wersja wspierana przez kanał v13.6
